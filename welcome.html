@@ -12,12 +12,6 @@
                     This is a read-only instance, so you can't modify the graph. However, you can run queries and
                     explore the management model.
                 </p>
-                <p>If you are new to Neo4j, check out the following guides:</p>
-                <ul>
-                    <li><a play-topic="concepts">Concepts</a></li>
-                    <li><a play-topic="cypher">Cypher</a></li>
-                    <li><a play-topic="intro">Browser Intro</a></li>
-                </ul>
                 <p>Here's the graph which is used to store the management model:</p>
                 <p><img class="img-responsive" src="/schema.svg" alt="Graph schema" /></p>
                 <p>Step through the next slides to learn more about the database and to see some sample queries.</p>
@@ -93,7 +87,7 @@
                     <code>connection-definitions</code> resources:
                 </p>
                 <pre class="runnable">
-MATCH g=(r:Resource)-->(:Attribute)-[:ALTERNATIVE|:REQUIRES]->(:Attribute)
+MATCH g=(r:Resource)-->(:Attribute)-[:ALTERNATIVE|REQUIRES]->(:Attribute)
 WHERE r.name = "connection-definitions"
 RETURN g</pre
                 >
@@ -140,7 +134,7 @@ RETURN r.address, a.name</pre
                 <pre class="runnable">
 MATCH (r:Resource)-->(a:Attribute)
 WHERE a.required = true AND
-      exists(a.default)
+      a.default IS NOT NULL
 RETURN r.address, a.name, a.default</pre
                 >
                 <p>List all deprecated attributes since management model 12:</p>
@@ -178,10 +172,10 @@ ORDER BY parameters DESC</pre
         <slide class="row-fluid">
             <div class="col-sm-12">
                 <h3>Identity</h3>
-                <p>Show information about WildFly and the management model version:</p>
+                <p>Show information about the source of the management model:</p>
                 <pre class="runnable">
 MATCH (i:Identity)
-RETURN i.`product-name`, i.`product-version`, i.`management-version`</pre
+RETURN i.name, i.version, i.identifier</pre
                 >
             </div>
         </slide>
